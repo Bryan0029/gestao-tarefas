@@ -1,13 +1,16 @@
 # Metas — Sistema de Gestão de Tarefas
 
-O **Metas** é uma aplicação web desenvolvida como projeto escolar, com o objetivo de facilitar a organização pessoal e o gerenciamento de tarefas. O sistema permite cadastrar atividades, definir prioridades, estabelecer prazos e acompanhar o progresso das tarefas por meio de uma interface simples e intuitiva.
+O **Metas** é uma aplicação web desenvolvida com o objetivo de facilitar a organização pessoal e o gerenciamento de tarefas. O sistema permite que diferentes usuários criem suas próprias contas, cadastrem atividades, definam prioridades, estabeleçam prazos e acompanhem seu progresso por meio de uma interface simples e intuitiva.
 
 ## 🎯 Objetivo do projeto
 
-Desenvolver uma ferramenta que auxilie os usuários no planejamento de suas atividades diárias, proporcionando uma melhor organização e acompanhamento das tarefas pendentes e concluídas.
+Desenvolver uma ferramenta que auxilie os usuários no planejamento de suas atividades diárias, proporcionando maior organização, produtividade e controle sobre as tarefas pendentes e concluídas.
 
 ## ⚙️ Funcionalidades
 
+- **Cadastro de usuários:** criação de contas individuais com nome, e-mail e senha.
+- **Autenticação:** acesso ao sistema por meio de e-mail e senha.
+- **Gerenciamento individual:** cada usuário visualiza e administra somente suas próprias tarefas.
 - **Cadastro de tarefas:** criação de atividades com título e descrição.
 - **Categorização:** organização das tarefas por Trabalho, Pessoal, Estudos e Casa.
 - **Definição de prioridades:** classificação em Baixa, Normal e Alta.
@@ -15,24 +18,32 @@ Desenvolver uma ferramenta que auxilie os usuários no planejamento de suas ativ
 - **Acompanhamento:** marcação de tarefas como concluídas ou pendentes.
 - **Filtros:** visualização de todas as tarefas, somente pendentes ou somente concluídas.
 - **Indicadores de progresso:** exibição da quantidade de tarefas e do percentual de conclusão.
-- **Exclusão:** remoção de tarefas cadastradas, mediante confirmação.
+- **Exclusão:** remoção de tarefas cadastradas mediante confirmação.
+- **Encerramento de sessão:** opção para sair da conta com segurança.
 
 ## 🛠️ Tecnologias utilizadas
 
 | Tecnologia | Aplicação |
 |---|---|
-| PHP | Lógica e processamento do sistema |
-| MySQL | Banco de dados |
-| RedBeanPHP | Interação com o banco de dados |
-| HTML5 | Estrutura das páginas |
-| CSS3 | Estilização e responsividade |
+| PHP | Lógica de programação, processamento e funcionalidades do sistema |
+| MySQL | Armazenamento dos usuários e das tarefas |
+| RedBeanPHP | Abstração e interação com o banco de dados |
+| HTML5 | Estrutura das páginas e formulários |
+| CSS3 | Estilização e responsividade da interface |
+| Git e GitHub | Versionamento e hospedagem do código-fonte |
 
-## 🎨 Prototipação e documentação
+## 🔐 Autenticação e segurança
 
-O desenvolvimento do projeto também conta com materiais de planejamento e representação visual:
+O sistema possui um mecanismo de autenticação para garantir que cada usuário tenha acesso individual às suas tarefas.
 
-- [Protótipo das interfaces — Figma](https://www.figma.com/design/jVZ2ioj2b0ZTF4yE2oFByS/Projeto-Tarefas-I?m=auto&t=SHA3sWiOCFH8OK16-6)
-- [Mapa de navegação — Draw.io](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=mapa-navegacao.drawio&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1eAcrh1OhKB8hKaQ3GjVgpgg6XxbezSOt%26export%3Ddownload#%7B%22pageId%22%3A%22mapa-metas%22%7D)
+Entre os recursos implementados estão:
+
+- Armazenamento de senhas utilizando `password_hash()`.
+- Verificação de credenciais com `password_verify()`.
+- Gerenciamento de sessões com PHP.
+- Regeneração do identificador da sessão durante a autenticação.
+- Validação dos dados enviados pelos formulários.
+- Consultas de tarefas vinculadas ao identificador do usuário autenticado.
 
 ## 💻 Como executar o projeto
 
@@ -42,6 +53,8 @@ O desenvolvimento do projeto também conta com materiais de planejamento e repre
 - MySQL.
 - Apache ou servidor web compatível com PHP.
 - Extensões PDO, PDO MySQL e mbstring habilitadas.
+
+Recomenda-se utilizar o XAMPP para configurar o ambiente de desenvolvimento local.
 
 ### 1. Clonar o repositório
 
@@ -59,6 +72,8 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 ```
 
+As tabelas `usuarios` e `tarefas` são criadas automaticamente pelo sistema na primeira conexão com o banco de dados.
+
 ### 3. Configurar a conexão
 
 O arquivo `gestao-tarefas/conexao.php` contém as configurações de conexão com o banco de dados.
@@ -71,9 +86,13 @@ Por padrão, o sistema utiliza:
 - Usuário: `root`
 - Senha: vazia
 
-Esses parâmetros também podem ser configurados por meio das variáveis de ambiente `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` e `DB_PASS`.
+Também é possível configurar esses parâmetros por meio das seguintes variáveis de ambiente:
 
-A tabela necessária para o funcionamento do sistema é criada automaticamente na primeira conexão.
+- `DB_HOST`
+- `DB_PORT`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASS`
 
 ### 4. Executar a aplicação
 
@@ -83,6 +102,8 @@ Coloque a pasta do projeto no diretório do servidor local (por exemplo, `htdocs
 http://localhost/gestao-tarefas/gestao-tarefas/
 ```
 
+Ao acessar a aplicação, será possível criar uma conta e começar a utilizar o sistema.
+
 ## 📁 Estrutura do projeto
 
 ```text
@@ -91,6 +112,7 @@ gestao-tarefas/
 ├── README.md
 │
 └── gestao-tarefas/
+    │
     ├── assets/
     │   └── css/
     │       └── style.css
@@ -98,15 +120,34 @@ gestao-tarefas/
     ├── class/
     │   └── rb.php
     │
+    ├── cadastro.php
     ├── conexao.php
-    ├── index.php
+    ├── exclusao.php
     ├── inclusao.php
-    └── exclusao.php
+    ├── index.php
+    ├── login.php
+    └── logout.php
 ```
+
+### 📄 Descrição dos principais arquivos
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `index.php` | Página principal, listagem, filtros e indicadores de progresso das tarefas. |
+| `cadastro.php` | Cadastro de novos usuários e validação das informações. |
+| `login.php` | Autenticação dos usuários. |
+| `logout.php` | Encerramento da sessão do usuário. |
+| `conexao.php` | Conexão com o MySQL, criação das tabelas e funções auxiliares. |
+| `inclusao.php` | Formulário e processamento do cadastro de tarefas. |
+| `exclusao.php` | Confirmação e exclusão de tarefas. |
+| `class/rb.php` | Biblioteca RedBeanPHP utilizada na comunicação com o banco de dados. |
+| `assets/css/style.css` | Estilos visuais e responsividade da aplicação. |
 
 ## 📚 Contexto acadêmico
 
-Projeto desenvolvido com finalidade educacional, aplicando conhecimentos de desenvolvimento web, programação em PHP, estilização com CSS e integração com banco de dados MySQL.
+Projeto desenvolvido com finalidade educacional, aplicando conhecimentos de desenvolvimento web, programação em PHP, estruturação de páginas com HTML5, estilização com CSS3 e integração com banco de dados MySQL.
+
+O desenvolvimento também proporciona a aplicação prática de conceitos como autenticação, gerenciamento de sessões, operações CRUD e organização de dados relacionados a diferentes usuários.
 
 ---
 
