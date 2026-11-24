@@ -1,10 +1,12 @@
 <?php
 require_once __DIR__ . '/conexao.php';
+exigirLogin();
+$usuarioId = usuarioAtual()['id'];
 
 $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
-$tarefa = R::load('tarefas', $id);
+$tarefa = R::findOne('tarefas', 'id = ? AND user_id = ?', [$id, $usuarioId]);
 
-if (!$tarefa->id) {
+if (!$tarefa || !$tarefa->id) {
     header('Location: index.php');
     exit;
 }

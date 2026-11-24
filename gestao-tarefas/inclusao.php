@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/conexao.php';
+exigirLogin();
+$usuarioId = usuarioAtual()['id'];
 
 $erro = '';
 
@@ -13,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erro = 'Digite um título com pelo menos 3 caracteres.';
     } else {
         $tarefa = R::dispense('tarefas');
+        $tarefa->user_id = $usuarioId;
         $tarefa->titulo = $titulo;
         $tarefa->descricao = $descricao ?: null;
         $tarefa->categoria = $categoria ?: 'Trabalho';

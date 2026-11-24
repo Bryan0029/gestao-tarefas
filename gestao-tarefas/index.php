@@ -1,10 +1,12 @@
 <?php
 require_once __DIR__ . '/conexao.php';
+exigirLogin();
+$usuarioId = usuarioAtual()['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['alternar'])) {
-    $tarefa = R::load('tarefas', (int) $_POST['id']);
+    $tarefa = R::findOne('tarefas', 'id = ? AND user_id = ?', [(int) $_POST['id'], $usuarioId]);
 
-    if ($tarefa->id) {
+    if ($tarefa && $tarefa->id) {
         $tarefa->concluida = $tarefa->concluida ? 0 : 1;
         R::store($tarefa);
     }
@@ -17,16 +19,16 @@ $filtro = $_GET['filtro'] ?? 'todas';
 $ordem = 'ORDER BY concluida ASC, prazo IS NULL ASC, prazo ASC, criada_em DESC';
 
 if ($filtro === 'pendentes') {
-    $consulta = 'WHERE concluida = 0 ' . $ordem;
+    $consulta = 'WHERE user_id = ' . $usuarioId . ' AND concluida = 0 ' . $ordem;
 } elseif ($filtro === 'concluidas') {
-    $consulta = 'WHERE concluida = 1 ' . $ordem;
+    $consulta = 'WHERE user_id = ' . $usuarioId . ' AND concluida = 1 ' . $ordem;
 } else {
-    $consulta = $ordem;
+    $consulta = 'WHERE user_id = ' . $usuarioId . ' ' . $ordem;
 }
 
 $tarefas = R::findAll('tarefas', $consulta);
-$total = R::count('tarefas');
-$concluidas = R::count('tarefas', 'concluida = 1');
+$total = R::count('tarefas', 'user_id = ?', [$usuarioId]);
+$concluidas = R::count('tarefas', 'user_id = ? AND concluida = 1', [$usuarioId]);
 $pendentes = $total - $concluidas;
 $percentual = $total ? round(($concluidas / $total) * 100) : 0;
 
