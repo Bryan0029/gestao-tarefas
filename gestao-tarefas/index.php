@@ -52,6 +52,10 @@ topo('Minhas tarefas', 'index');
         <div class="flash success">Tarefa excluída.</div>
     <?php endif; ?>
 
+    <?php if (isset($_GET['editada'])): ?>
+        <div class="flash success">Tarefa atualizada com sucesso.</div>
+    <?php endif; ?>
+
     <div class="stats">
         <div class="stat-card accent">
             <span class="label">Seu progresso</span>
@@ -140,7 +144,8 @@ topo('Minhas tarefas', 'index');
                                 <?= $tarefa->prazo ? e(date('d/m/Y', strtotime((string) $tarefa->prazo))) : 'Sem prazo' ?>
                             </td>
                             <td>
-                                <a class="icon-button" href="exclusao.php?id=<?= (int) $tarefa->id ?>">⌫</a>
+                                <a class="icon-button" href="editar.php?id=<?= (int) $tarefa->id ?>" title="Editar tarefa" aria-label="Editar tarefa">✎</a>
+                                <a class="icon-button" href="exclusao.php?id=<?= (int) $tarefa->id ?>" title="Excluir tarefa" aria-label="Excluir tarefa">⌫</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
